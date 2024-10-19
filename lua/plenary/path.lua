@@ -261,7 +261,7 @@ function Path:new(...)
     path_string = table.concat(path_objs, sep)
   else
     assert(type(path_input) == "string", vim.inspect(path_input))
-    path_string = path_input
+    path_string = path_input:gsub('[/\\]', sep)
   end
 
   local obj = {
@@ -419,7 +419,7 @@ local function shorten_len(filename, len, exclude)
     count = count + 1
   end
 
-  local l = #final_path_components -- so that we don't need to keep calculating length
+  local l = #final_path_components       -- so that we don't need to keep calculating length
   table.remove(final_path_components, l) -- remove final slash
 
   -- add back empty positions
@@ -687,6 +687,7 @@ end
 function Path:is_absolute()
   return is_absolute(self.filename, self._sep)
 end
+
 -- }}}
 
 function Path:_split()
